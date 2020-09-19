@@ -56,14 +56,6 @@ def addtoqueue(urilist):
         sp.add_to_queue(uri)
     print('Done!')
 
-@cli.command(name='playlist')
-def playlistlist():
-    results = sp.current_user_playlists()
-    for playlist in (results['items']):
-        print (playlist['name'])
-
-    
-
 @cli.command(name='playing')
 def displaycurrentsong():
     #gets the url and info from getcurrentsong, updates the label 
@@ -82,7 +74,17 @@ def getcurrentsong():
         return results['item']['album']['images'][1]['url'], songinfoformatted
     else:
         return None
-        
+
+"""
+TODO:convert a name of a playlist into an id and play that
+"""
+@cli.command(name='playlistlist')
+def getplaylists():
+    results = sp.current_user_playlists()
+    for playlist in (results['items']):
+        print (f'Name: {playlist["name"]} ID: {playlist["id"]}')
+
+
 @cli.command(name='back')
 def backsong():
     sp.previous_track()
