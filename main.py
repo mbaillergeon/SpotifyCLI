@@ -9,7 +9,7 @@ import click
 load_dotenv()
 
 username = os.environ.get('USERNAME')
-scope = 'user-modify-playback-state user-read-playback-state user-top-read app-remote-control'
+scope = 'user-modify-playback-state user-read-playback-state user-top-read app-remote-control playlist-read-private'
 client_id = os.environ.get('CLIENT_ID')
 client_secret = os.environ.get('CLIENT_SECRET')
 redirect_uri = os.environ.get('REDIRECT_URI')
@@ -55,6 +55,14 @@ def addtoqueue(urilist):
     for uri in smallurilist:
         sp.add_to_queue(uri)
     print('Done!')
+
+@cli.command(name='playlist')
+def playlistlist():
+    results = sp.current_user_playlists()
+    for playlist in (results['items']):
+        print (playlist['name'])
+
+    
 
 @cli.command(name='playing')
 def displaycurrentsong():
