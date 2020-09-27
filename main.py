@@ -77,6 +77,8 @@ def getcurrentsong():
 
 """
 TODO:convert a name of a playlist into an id and play that
+need to figure out how to select the number and then send that ID to play the idea
+
 """
 @cli.command(name='playlistlist')
 def getplaylists():
