@@ -84,12 +84,18 @@ need to figure out how to select the number and then send that ID to play the id
 def getplaylists():
     results = sp.current_user_playlists()
     for number, playlist in enumerate(results['items']):
-        print (f'Number: {number} Name: {playlist["name"]} ID: {playlist["id"]}')
+        # print(playlist["uri"])
+        print (f'Number: {number} Name: {playlist["name"]}')
 
 @cli.command(name='playplaylist')
 @click.argument('playlistnumber')
 def playplaylist(playlistnumber):
-    print(playlistnumber)
+    playlistnames = {}
+    results = sp.current_user_playlists()
+    for number, playlist in enumerate(results["items"]):
+        playlistnames[number] = playlist["uri"]
+
+    sp.start_playback(None, playlistnames[int(playlistnumber)])
 
 @cli.command(name='back')
 def backsong():
@@ -104,15 +110,23 @@ def repeatstate(state):
     sp.repeat(stateword)
 
 @cli.command(name='shuffle')
-def shuffle():
-    if shuffling == False:
-        print('Shuffling')
+@click.argument('shuffleswitch')
+def shuffle(shuffleswitch):
+    print(shuffleswitch)
+    if shuffleswitch == "on":
         sp.shuffle(True)
-        shuffling = True
+        print('SHUFFLING ON')
     else:
-        print('Stop Shuffling')
         sp.shuffle(False)
-        shuffling = False
+        print('SHUFFLING OFF')
+    # if shuffling == False:
+    #     print('Shuffling')
+    #     sp.shuffle(True)
+    #     shuffling = True
+    # else:
+    #     print('Stop Shuffling')
+    #     sp.shuffle(False)
+        # shuffling = False
     #state: True, False
 
 
