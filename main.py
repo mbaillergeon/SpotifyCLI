@@ -23,9 +23,9 @@ def cli():
 @cli.command(name='next')
 def gonextsong():
     #skips to the next song
-    print('----------')
-    print('Playing Next Song')
+    print('NEXT')
     sp.next_track()
+    displaycurrentsong()
     # displaycurrentsong()
 
 @cli.command(name='bang')
@@ -57,6 +57,9 @@ def addtoqueue(urilist):
     print('Done!')
 
 @cli.command(name='playing')
+def displaycurrentplaying():
+    displaycurrentsong()
+
 def displaycurrentsong():
     #gets the url and info from getcurrentsong, updates the label 
 
@@ -75,11 +78,6 @@ def getcurrentsong():
     else:
         return None
 
-"""
-TODO:convert a name of a playlist into an id and play that
-need to figure out how to select the number and then send that ID to play the idea
-
-"""
 @cli.command(name='playlistlist')
 def getplaylists():
     results = sp.current_user_playlists()
@@ -97,9 +95,19 @@ def playplaylist(playlistnumber):
 
     sp.start_playback(None, playlistnames[int(playlistnumber)])
 
+    playlisttracks(playlistnames[int(playlistnumber)])
+
+def playlisttracks(playlistid):
+    # print(sp.playlist_tracks(playlistid))
+    results = sp.playlist_tracks(playlistid)
+    for track in results['items'][:10]:
+        print(track['track']['name'])
+
+
 @cli.command(name='back')
 def backsong():
     sp.previous_track()
+    displaycurrentsong()
 
 @cli.command(name='repeat')
 def repeatstate(state):
@@ -131,12 +139,15 @@ def shuffle(shuffleswitch):
 
 
 @cli.command(name='vol')
-def volumechange(value):
-    sp.volume(23)
+@click.argument('volumelevel')
+def volumechange(volumelevel):
+    sp.volume(int(volumelevel))
+    print(f'Volume Changed to: {volumelevel}')
 
 @cli.command(name='play')
 def startsong():
     sp.start_playback()
+    displaycurrentsong()
 
 @cli.command(name='pause')
 def pausesong():
