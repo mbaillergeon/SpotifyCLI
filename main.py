@@ -29,20 +29,29 @@ def gonextsong():
     # displaycurrentsong()
 
 @cli.command(name='bang')
-def bangers():
+@click.argument('time')
+def bangers(time):
     #fuction to pass the uri list to the add to queue function
-    addtoqueue(generatetoplist())
+    addtoqueue(generatetoplist(time))
 
-def toptracks():
+def toptracks(time):
     #prints out a list of the all time top tracks for a user
-    results = sp.current_user_top_tracks(time_range='long_term')
+    results = sp.current_user_top_tracks('long_term')
     for i, item in enumerate(results['items']):
         print(i, item['name'], item['uri'])
 
-def generatetoplist():
+def generatetoplist(time):
     #looks through the user's top tracks, gets the uri for the songs, shuffles then, returns five of them
     trackurilist = []
-    results = sp.current_user_top_tracks(limit = 50, time_range='long_term')
+
+    if time == 'short':
+        time_range = 'short_term'
+    elif time == 'mid':
+        time_range = 'medium_term'
+    else:
+        time_range = 'long_term'
+
+    results = sp.current_user_top_tracks(limit = 50, time_range=time_range)
     for item in results['items']:
         trackurilist.append(item['uri'])
     random.shuffle(trackurilist)
