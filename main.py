@@ -87,6 +87,9 @@ def getplaylists():
 
 @cli.command(name='playplaylist')
 @click.argument('playlistnumber')
+def playplaylist_command(playlistnumber):
+    return playplaylist(playlistnumber)
+
 def playplaylist(playlistnumber):
     playlistnames = {}
     results = sp.current_user_playlists()
@@ -152,6 +155,13 @@ def startsong():
 @cli.command(name='pause')
 def pausesong():
     sp.pause_playback()
+
+@cli.command(name='study')
+def studytime():
+    print("in the studytime")
+    return playplaylist(7)
+
+
 
 if __name__ == "__main__":
     
